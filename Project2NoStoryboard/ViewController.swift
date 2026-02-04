@@ -32,6 +32,19 @@ class ViewController: UIViewController {
         }
         
         title = countries[correctAnswer].uppercased()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "trophy"),
+            style: .plain,
+            target: self,
+            action: #selector(showScore)
+        )
+    }
+    
+    @objc func showScore() {
+        let alertController = UIAlertController(title: "Score", message: "Your score is \(score).", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        present(alertController, animated: true)
     }
     
     func setupButtons() {
