@@ -48,29 +48,41 @@ class ViewController: UIViewController {
     }
     
     func setupButtons() {
+        let safeArea = view.safeAreaLayoutGuide
+        
         for i in 0..<3 {
             let button = UIButton(type: .custom)
+            button.translatesAutoresizingMaskIntoConstraints = false
             button.layer.borderWidth = 1
             button.layer.borderColor = UIColor.lightGray.cgColor
-            button.translatesAutoresizingMaskIntoConstraints = false
+            
+            button.tag = i
+            button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             
             view.addSubview(button)
             buttons.append(button)
             
             let isFirstButton = i == 0
+            let isLastButton = i == 2
             
             NSLayoutConstraint.activate([
                 button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                button.heightAnchor.constraint(equalToConstant: 100),
-                button.widthAnchor.constraint(equalToConstant: 200),
-                button.topAnchor.constraint(
-                    equalTo: isFirstButton ? view.topAnchor : buttons[i-1].bottomAnchor,
-                    constant: isFirstButton ? 100 : 30
-                )
+                button.widthAnchor.constraint(lessThanOrEqualToConstant: 200),
+                button.heightAnchor.constraint(equalTo: button.widthAnchor, multiplier: 0.5),
             ])
             
-            button.tag = i
-            button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+            
+            
+            if isFirstButton {
+                button.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
+            } else {
+                button.topAnchor.constraint(equalTo: buttons[i-1].bottomAnchor, constant: 30).isActive = true
+                button.heightAnchor.constraint(equalTo: buttons[i-1].heightAnchor).isActive = true
+            }
+            
+            if isLastButton {
+                button.bottomAnchor.constraint(lessThanOrEqualTo: safeArea.bottomAnchor, constant: -20).isActive = true
+            }
         }
     }
     
